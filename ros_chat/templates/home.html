@@ -1,0 +1,10 @@
+<h1>Welcome to the Home Page</h1>
+<p>Only authenticated users can see this page.</p>
+<p>Tap to see your chats:</p>
+<a href="{% url 'chat_list' %}">My Chats</a>
+<p>Hello, {{ user.username }}!</p>
+
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">logout</button>
+</form>

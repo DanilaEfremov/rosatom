@@ -1,0 +1,18 @@
+<h2>Chat: {{ chat.name }}</h2>
+
+<div>
+    <ul>
+        {% for message in messages %}
+        <li><strong>{{ message.user }}:</strong> {{ message.content }} <em>({{ message.timestamp }})</em></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Форма для отправки нового сообщения -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
+
+<a href="{% url 'chat_list' %}">Back to chat list</a>

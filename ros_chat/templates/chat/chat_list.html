@@ -1,0 +1,9 @@
+<h2>Мои чаты</h2>
+<ul>
+    {% for chat in chats %}
+        <li><a href="{% url 'chat_detail' chat.id %}">{{ chat.name }}</a></li>
+    {% empty %}
+        <li>У вас пока нет доступных чатов.</li>
+    {% endfor %}
+</ul>
+<p>Hello, {{ user.username }}!</p>
