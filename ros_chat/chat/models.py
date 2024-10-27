@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import CustomUser
 from django.utils import timezone
 
+
 class Chat(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)
@@ -9,6 +10,7 @@ class Chat(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat, related_name="messages", on_delete=models.CASCADE)

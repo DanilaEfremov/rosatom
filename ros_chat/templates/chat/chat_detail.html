@@ -1,18 +1,37 @@
-<h2>Chat: {{ chat.name }}</h2>
+<h1>{{ chat.name }}</h1>
 
-<div>
-    <ul>
-        {% for message in messages %}
-        <li><strong>{{ message.user }}:</strong> {{ message.content }} <em>({{ message.timestamp }})</em></li>
-        {% endfor %}
-    </ul>
+<div id="chat-log">
+    {% for message in messages %}
+    <p><strong>{{ message.user.username }}:</strong> {{ message.content }}</p>
+    {% endfor %}
 </div>
 
-<!-- Форма для отправки нового сообщения -->
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Send</button>
-</form>
+<!-- Поле ввода нового сообщения -->
+<input id="chat-message-input" type="text" placeholder="Введите сообщение...">
+<button id="chat-message-submit">Send</button>
 
-<a href="{% url 'chat_list' %}">Back to chat list</a>
+<script>
+    const chatId = {{ chat.id }};
+    const userId = {{ request.user.id }};
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + chatId + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatLog = document.getElementById('chat-log');
+        chatLog.innerHTML += '<p><strong>' + data.username + ':</strong> ' + data.message + '</p>';
+    };
+
+    document.getElementById('chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.getElementById('chat-message-input');
+        const message = messageInputDom.value;
+
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'user_id': userId
+        }));
+
+        messageInputDom.value = '';  // Очищаем поле ввода
+    };
+</script>
