@@ -1,0 +1,10 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+    <h1>Чат Росатома</h1>
+    {% if not request.user.is_authenticated %}
+        {% include 'includes/not_auth/home.html' %}
+    {% else %}
+        {% include 'includes/auth/home.html' %}
+    {% endif %}
+{% endblock content %}

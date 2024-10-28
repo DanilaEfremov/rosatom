@@ -1,9 +1,15 @@
-<h2>Login</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log In</button>
-</form>
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+    <h1>Вход в чат</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Войти</button>
+    </form>
 
 <!-- Добавление кнопки для перехода к регистрации -->
-<p>Don't have an account? <a href="{% url 'signup' %}">Register here</a></p>
+{#<p>Don't have an account? <a href="{% url 'signup' %}">Register here</a></p>#}
+
+{% endblock content %}

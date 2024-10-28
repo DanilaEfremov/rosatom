@@ -1,0 +1,8 @@
+<h2>Здравствуй, {{ user.username }}!</h2>
+
+<a class="block my-6" href="{% url 'chat_list' %}">Просмотр моих чатов</a>
+
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">logout</button>
+</form>

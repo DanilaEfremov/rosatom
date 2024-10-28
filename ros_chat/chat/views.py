@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Chat, Message
 from .forms import MessageForm
 
+
 @login_required
 def chat_list(request):
     if request.user.is_superuser:

@@ -1,6 +1,12 @@
-<h2>Sign Up</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
-</form>
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+    <h1>Заполните форму регистрации</h1>
+    <div class="signup">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Зарегестрироваться</button>
+        </form>
+    </div>
+{% endblock content %}

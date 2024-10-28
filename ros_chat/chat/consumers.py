@@ -1,5 +1,7 @@
 # chat/consumers.py
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from accounts.models import CustomUser
 from .models import Chat, Message
 import json
 
@@ -20,9 +22,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message'].strip()
+        user_id = text_data_json['user_id']
 
         # Получение пользователя в асинхронном контексте
         user = self.scope['user']
+
         chat = await Chat.objects.aget(id=self.chat_id)
         if message == '':
             return
