@@ -13,15 +13,11 @@ services:
     depends_on:
       - db
       - redis
-    ports:
-      - 8000:8000
 
   db:
     image: postgres:17-alpine3.20
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_DB: chat_db
       POSTGRES_USER: dan

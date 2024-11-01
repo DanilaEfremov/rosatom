@@ -1,9 +1,21 @@
-<h2>Мои чаты</h2>
-<ul>
-    {% for chat in chats %}
-        <li><a href="{% url 'chat_detail' chat.id %}">{{ chat.name }}</a></li>
-    {% empty %}
-        <li>У вас пока нет доступных чатов.</li>
-    {% endfor %}
-</ul>
-<p>Hello, {{ user.username }}!</p>
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+    
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
+    
+<div id="chat_list">
+    <h1 class="text-5xl font-extrabold dark:text-gray-900">Ваши чаты</h1>
+    <ul class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        {% for chat in chats %}
+            <li class="w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600"><a href="{% url 'chat_detail' chat.id %}"> {{ chat.name }}</a></li>
+        {% empty %}
+            <li class="w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">У вас пока нет доступных чатов.</li>
+        {% endfor %}
+    </ul>
+
+    <h5 class="text-xl font-bold dark:text-black">Здравствуй, {{ user.username }}!</h5>
+</div>
+
+{% endblock content %}

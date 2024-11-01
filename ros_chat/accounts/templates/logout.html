@@ -1,0 +1,12 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+    <div id="do_logout">
+        <h1>Выход из чата</h1>
+        <h2>Вы уверены, что хотите выйти?</h2>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Выход</button>
+        </form>
+    </div>
+{% endblock content %}

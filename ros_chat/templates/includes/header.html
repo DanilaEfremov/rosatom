@@ -13,7 +13,7 @@
     <nav class="block relative">
         <ul class="navitems flex items-center justify-center h-full">
             
-            {% if not request.user.is_authenticated %}
+           
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li x-data="{ dropdownOpen: false }" class="relative">
                     <a @click="dropdownOpen = !dropdownOpen" @click.away="dropdownOpen = false" class="cursor-pointer select-none">
@@ -27,17 +27,16 @@
                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
                     >
                         <ul class="hoverlist [&>li>a]:justify-end">
-                            <li><a href="{% url 'login' %}">Вход</a></li>
-                            <li><a href="{% url 'signup' %}">Регистрация</a></li>
+                             {% if not request.user.is_authenticated %}
+                                <li><a href="{% url 'login' %}">Вход</a></li>
+                                <li><a href="{% url 'signup' %}">Регистрация</a></li>
+                             {% else %}
+                                <li><a href="{% url 'do_logout' %}">Выход</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </li>
             
-            {% else %}
-{#                <li><a href="{% url 'account_login' %}">Login</a></li>#}
-{#                <li><a href="{% url 'account_signup' %}?next={% url 'profile-onboarding' %}">Signup</a></li>#}
-{#                <li><a href="{% url 'client_signup' %}">Зарегистрироваться</a></li>#}
-            {% endif %}
         
         </ul>
     </nav>

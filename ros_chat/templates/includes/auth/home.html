@@ -2,7 +2,7 @@
 
 <a class="block my-6" href="{% url 'chat_list' %}">Просмотр моих чатов</a>
 
-<form method="post" action="{% url 'logout' %}">
+<form method="post" action="{% url 'do_logout' %}">
     {% csrf_token %}
-    <button type="submit">logout</button>
+    <button type="submit">Выход</button>
 </form>

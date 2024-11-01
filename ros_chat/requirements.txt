@@ -6,3 +6,4 @@ psycopg2
 gunicorn
 dj-config-url
 channels-redis
+djangorestframework
