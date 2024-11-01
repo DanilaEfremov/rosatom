@@ -29,6 +29,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/ros_chat/templates" />
+        <option value="$MODULE_DIR$/ros_chat/accounts/templates" />
       </list>
     </option>
   </component>
