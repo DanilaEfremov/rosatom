@@ -1,0 +1,209 @@
+openapi: 3.0.0
+info:
+  title: Chat API
+  version: "1.0"
+  description: API для регистрации, авторизации, отправки сообщений, получения чатов и удаления пользователей из чата (суперпользователем).
+
+paths:
+  /register/:
+    post:
+      summary: Регистрация нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+      responses:
+        "201":
+          description: Успешная регистрация
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                      email:
+                        type: string
+        "400":
+          description: Неправильные данные для регистрации
+
+  /login/:
+    post:
+      summary: Авторизация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        "400":
+          description: Неправильные данные для авторизации
+
+  /messages/send/:
+    post:
+      summary: Отправка сообщения в чат
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chat_room:
+                  type: integer
+                content:
+                  type: string
+      responses:
+        "201":
+          description: Сообщение отправлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        "400":
+          description: Пустое сообщение или ошибка
+
+  /messages/{chat_id}/:
+    get:
+      summary: Получение сообщений из чата
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: chat_id
+          schema:
+            type: integer
+          required: true
+          description: Идентификатор чата
+      responses:
+        "200":
+          description: Список сообщений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        "403":
+          description: Пользователь не имеет доступа к чату
+
+  /user/chats/:
+    get:
+      summary: Получение списка чатов пользователя
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Список чатов пользователя
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatRoom'
+        "401":
+          description: Пользователь не авторизован
+
+  /chat/{chat_id}/remove_user/{user_id}/:
+    delete:
+      summary: Удаление пользователя из чата (для суперпользователя)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: chat_id
+          schema:
+            type: integer
+          required: true
+          description: Идентификатор чата
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: Идентификатор пользователя
+      responses:
+        "200":
+          description: Пользователь успешно удален из чата
+        "403":
+          description: Недостаточно прав для выполнения операции
+        "404":
+          description: Чат или пользователь не найден
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+
+    ChatRoom:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+        chat_room:
+          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+        content:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

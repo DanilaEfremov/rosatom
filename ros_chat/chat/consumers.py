@@ -22,7 +22,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message'].strip()
-        user_id = text_data_json['user_id']
 
         # Получение пользователя в асинхронном контексте
         user = self.scope['user']

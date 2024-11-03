@@ -1,13 +1,11 @@
 {% extends 'layouts/blank.html' %}
 
 {% block links %}
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+{#    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />#}
 {% endblock links %}
 
 {% block scripts %}
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-
+{#    <script src="https://cdn.tailwindcss.com"></script>#}
 {% endblock scripts %}
 
 {% block styles %}
@@ -29,8 +27,9 @@
 {%  block content %}
     <h1 class="big-header">{{ chat.name }}</h1>
     
-    <div class="container mx-auto">
-        <div id="chat-log" class="mb-3">
+    <div id="chat" class="flex flex-col mx-auto h-[calc(100vh-300px)]">
+    
+        <div id="chat-log" class="block mb-3 overflow-auto">
             {% for message in messages %}
                 {% if message.user.id != request.user.id %} 
                     <div class="chat chat-start">
@@ -51,8 +50,10 @@
                 {% endif %}
             {% endfor %}
         </div>
+    
         <div class="divider"></div>
-        <form id="myForm" class="w-full mx-auto mt-3">
+        
+        <form id="myForm" class="block w-full mx-auto">
             <div id="chat-message-input-join" class="join">
                 <input id="chat-message-input" class="input input-bordered join-item dark:placeholder-gray-400"  placeholder="Введите сообщение..." />
                 <button id="chat-message-submit" type="button" class="btn join-item rounded-r-full"> 
@@ -62,7 +63,9 @@
                 </button>
             </div>    
         </form>
+    
     </div>
+    
     
     <script>
         const chatId = {{ chat.id }};

@@ -1,6 +1,4 @@
 # docker-compose.yml
-version: '3.8'
-
 services:
   web:
     build: .
@@ -10,6 +8,8 @@ services:
       - static:/app/static
     env_file:
       - .env
+    expose:
+      - 8000
     depends_on:
       - db
       - redis
@@ -22,11 +22,13 @@ services:
       POSTGRES_DB: chat_db
       POSTGRES_USER: dan
       POSTGRES_PASSWORD: 1453
+    expose:
+      - "5432"
 
   redis:
     image: redis:7.4.1-alpine3.20
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
 
   nginx:
     image: nginx:latest

@@ -49,4 +49,11 @@ def login(request):
     if not user:
         return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
     token, _ = Token.objects.get_or_create(user=user)
+
+
+    # from django.contrib.sessions.backends.db import SessionStore
+    # s = SessionStore()
+    # s.create()
+    # s.session_key
+
     return Response({'token': token.key}, status=status.HTTP_200_OK)

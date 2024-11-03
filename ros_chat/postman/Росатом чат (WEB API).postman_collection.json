@@ -1,0 +1,315 @@
+{
+	"info": {
+		"_postman_id": "44a5a810-7853-4d8e-9c89-c5c437e7115d",
+		"name": "Росатом чат (WEB API)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34370612"
+	},
+	"item": [
+		{
+			"name": "Список доступных чатов",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{web_proto}}://{{host}}{{port}}/api/chat/",
+					"protocol": "{{web_proto}}",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"chat",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Сообщения из чата",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{web_proto}}://{{host}}{{port}}/api/chat/{{chat_id}}/message",
+					"protocol": "{{web_proto}}",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"chat",
+						"{{chat_id}}",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Отправка сообщения",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content",
+						"value": "тестовое сообщение",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{web_proto}}://{{host}}{{port}}/api/chat/1/message/",
+					"protocol": "{{web_proto}}",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"chat",
+						"1",
+						"message",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Вход в систему",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Token field is exist\", function () {",
+							"    pm.expect(jsonData.token).to.exist;",
+							"});",
+							"",
+							"if (pm.response.to.have.status(200) && pm.expect(jsonData.token).to.exist)",
+							"    pm.environment.set(\"token\", jsonData.token);",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{web_proto}}://{{host}}{{port}}/api/accounts/login/",
+					"protocol": "{{web_proto}}",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"accounts",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Регистрация",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/accounts/register/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"accounts",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление из чата",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "1453",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "dan",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "chat_id",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "user_id",
+						"value": "2",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/api/chat/2/user/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"chat",
+						"2",
+						"user",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление в чат",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{web_proto}}://{{host}}{{port}}/api/chat/2/user/2",
+					"protocol": "{{web_proto}}",
+					"host": [
+						"{{host}}{{port}}"
+					],
+					"path": [
+						"api",
+						"chat",
+						"2",
+						"user",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": ":80",
+			"type": "string"
+		},
+		{
+			"key": "web_proto",
+			"value": "http",
+			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "chat_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
