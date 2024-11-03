@@ -34,18 +34,18 @@
                 {% if message.user.id != request.user.id %} 
                     <div class="chat chat-start">
                         <div class="chat-header">
-                            {{ message.user.username }}
+                            @{{ message.user.username }}
                             <time class="text-xs opacity-50">{{ message.timestamp }}</time>
                         </div>
-                        <div class="chat-bubble">{{ message.content }}</div>
+                        <div class="chat-bubble chat-bubble-accent text-white font-bold">{{ message.content }}</div>
                     </div>
                 {% else %}
                     <div class="chat chat-end">
                         <div class="chat-header">
-                            {{ message.user.username }}
+                            @{{ message.user.username }}
                             <time class="text-xs opacity-50">{{ message.timestamp }}</time>
                         </div>
-                        <div class="chat-bubble chat-bubble-info">{{ message.content }}</div>
+                        <div class="chat-bubble chat-bubble-info text-white font-bold">{{ message.content }}</div>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -70,6 +70,7 @@
     <script>
         const chatId = {{ chat.id }};
         const userId = {{ request.user.id }};
+        const username = "{{ request.user.username }}";
         const currentTime = new Date().toLocaleString('ru-RU', {
             day: 'numeric',
             month: 'long',
@@ -85,8 +86,17 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
+        const msg_creator = data.username;
+        const first_name = data.first_name;
+        const last_name = data.last_name;
+        const message = data.message;
+        const timestamp = data.timestamp;
+        
         const chatLog = document.getElementById('chat-log');
-        chatLog.innerHTML += '<div class="chat chat-end"> <div class="chat-header">' + data.username + '<time class="text-xs opacity-50">' + currentTime + '</time></div><div class="chat-bubble chat-bubble-info">' + data.message + '</div></div>';
+        const msg_class = msg_creator === username ? 'chat-end' : 'chat-start';
+        const msg_color = msg_creator === username ? 'chat-bubble-info' : 'chat-bubble-accent';
+        console.log(first_name)
+        chatLog.innerHTML += '<div class="chat ' + msg_class + '"> <div class="chat-header"> @' + msg_creator + ' <time class="text-xs opacity-50">' + currentTime + '</time></div><div class="chat-bubble ' + msg_color + ' text-white font-bold">' + message + '</div></div>';
     };
 
     document.getElementById('chat-message-submit').onclick = function(e) {

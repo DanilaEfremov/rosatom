@@ -1,9 +1,12 @@
 # chat/consumers.py
+import json
+import logging
+
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from accounts.models import CustomUser
 from .models import Chat, Message
-import json
+from core.utils import convertDatetimeToString
 
 class ChatJsonConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
@@ -28,21 +31,32 @@ class ChatJsonConsumer(AsyncJsonWebsocketConsumer):
         user = self.scope['user']
 
         chat = await Chat.objects.aget(id=self.chat_id)
-        await Message.objects.acreate(chat=chat, user=user, content=message)
-
+        msg_record = await Message.objects.acreate(chat=chat, user=user, content=message)
+        context = {
+            'type':      'chat_message',
+            'message':    message,
+            'username':   user.username,
+            'first_name': user.first_name,
+            'last_name':  user.last_name,
+            'timestamp':  convertDatetimeToString(msg_record.timestamp),
+        }
         # Отправляем сообщение в группу
-        await self.channel_layer.group_send(self.room_group_name, {
-        # An event has a special 'type' key corresponding to the name of the method
-        # that should be invoked on consumers that receive the event.
-            'type': 'chat_message',
-            'message': message,
-            'username': user.username,
-        })
+        await self.channel_layer.group_send(self.room_group_name, context)
 
+
+    @classmethod
+    async def encode_json(cls, content):
+        return json.dumps(content, ensure_ascii=False)
 
     async def chat_message(self, event):
-        message = event['message']
-        username = event['username']
+        context = {
+            'message'   : event['message'],
+            'username'  : event['username'],
+            'first_name': event['first_name'],
+            'last_name' : event['last_name'],
+            'timestamp' : event['timestamp']
+        }
+
         # Отправка сообщения через WebSocket
-        await self.send_json(content={'message': message, 'username': username})
+        await self.send_json(content=context)
 

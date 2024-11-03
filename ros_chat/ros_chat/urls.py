@@ -9,4 +9,6 @@ urlpatterns = [
     path('', include('core.urls')),
     path('chats/', include('chat.urls')),
     path('api/', include('ros_chat.urls_api')),
+
+
 ]

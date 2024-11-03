@@ -1,11 +1,11 @@
 openapi: 3.0.0
 info:
-  title: Chat API
+  title: RosChat API
   version: "1.0"
   description: API для регистрации, авторизации, отправки сообщений, получения чатов и удаления пользователей из чата (суперпользователем).
 
 paths:
-  /register/:
+  /api/accounts/register/:
     post:
       summary: Регистрация нового пользователя
       requestBody:
@@ -43,7 +43,7 @@ paths:
         "400":
           description: Неправильные данные для регистрации
 
-  /login/:
+  /api/accounts/login/:
     post:
       summary: Авторизация пользователя
       requestBody:
@@ -70,33 +70,8 @@ paths:
         "400":
           description: Неправильные данные для авторизации
 
-  /messages/send/:
-    post:
-      summary: Отправка сообщения в чат
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                chat_room:
-                  type: integer
-                content:
-                  type: string
-      responses:
-        "201":
-          description: Сообщение отправлено
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Message'
-        "400":
-          description: Пустое сообщение или ошибка
 
-  /messages/{chat_id}/:
+  /api/chat/{chat_id}/message:
     get:
       summary: Получение сообщений из чата
       security:
@@ -120,7 +95,7 @@ paths:
         "403":
           description: Пользователь не имеет доступа к чату
 
-  /user/chats/:
+  /api/chat/:
     get:
       summary: Получение списка чатов пользователя
       security:
@@ -137,7 +112,7 @@ paths:
         "401":
           description: Пользователь не авторизован
 
-  /chat/{chat_id}/remove_user/{user_id}/:
+  /api/chat/{chat_id}/user/{user_id}/:
     delete:
       summary: Удаление пользователя из чата (для суперпользователя)
       security:
