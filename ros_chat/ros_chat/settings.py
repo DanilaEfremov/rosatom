@@ -53,8 +53,6 @@ INSTALLED_APPS = [
     'channels',
 ]
 
-ASGI_APPLICATION = 'ros_chat.asgi.application'
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -101,7 +99,10 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'ros_chat.wsgi.application'
+ASGI_APPLICATION = 'ros_chat.asgi.application'
+
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -118,8 +119,8 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'db',
-        'PORT': '5432',
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT'),
     }
 }
 

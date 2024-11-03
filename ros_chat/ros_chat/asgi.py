@@ -1,5 +1,4 @@
 import os
-
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ros_chat.settings')
@@ -10,11 +9,11 @@ import chat.routing
 from channels.security.websocket import AllowedHostsOriginValidator
 
 
-application = ProtocolTypeRouter({
+application = ProtocolTypeRouter(
+    {
     "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
-        URLRouter(
-            chat.routing.websocket_urlpatterns
+        URLRouter(chat.routing.websocket_urlpatterns)
         )
-    )
-})
+    }
+)
