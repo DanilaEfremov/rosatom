@@ -10,11 +10,10 @@ WORKDIR /app
 
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
-
 COPY . /app
 RUN ./manage.py collectstatic --noinput
 
-#python manage.py migrate
+#RUN ./manage.py migrate
 #python manage.py drf_create_token <username>
 
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "ros_chat.asgi:application"]

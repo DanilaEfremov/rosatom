@@ -53,8 +53,6 @@ INSTALLED_APPS = [
     'channels',
 ]
 
-SWAGGER_YAML_FILE = os.path.join(BASE_DIR, 'swagger.yaml')
-
 
 CHANNEL_LAYERS = {
     "default": {

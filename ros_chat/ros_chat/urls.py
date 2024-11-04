@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
@@ -9,6 +8,4 @@ urlpatterns = [
     path('', include('core.urls')),
     path('chats/', include('chat.urls')),
     path('api/', include('ros_chat.urls_api')),
-
-
 ]

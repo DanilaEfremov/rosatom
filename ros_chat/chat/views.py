@@ -1,8 +1,8 @@
-from django.http import HttpResponseForbidden
+from crypt import methods
+
+from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.template.context_processors import request
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from accounts.models import CustomUser
@@ -17,15 +17,17 @@ from .serializers import MessageSerializer, ChatRoomSerializer
 
 @login_required
 def chat_list(request):
-    if request.user.is_superuser:
-        chats = Chat.objects.all()
-    else:
-        chats = request.user.chats.all()
-
+    """Возвращает список чатов пользователя."""
+    chats = Chat.objects.all() if request.user.is_superuser else request.user.chats.all()
     return render(request, 'chat/chat_list.html', {'chats': chats})
 
 @login_required
-def chat_detail(request, chat_id):
+def chat_detail(request, chat_id: int):
+    """Возвращает страницу с конкретным чатом.
+
+    Args:
+        chat_id (int): ID чата.
+    """
     chat = get_object_or_404(Chat, id=chat_id)
 
     if request.user not in chat.participants.all() and not request.user.is_superuser:
@@ -51,6 +53,16 @@ def chat_detail(request, chat_id):
     })
 
 
+@login_required
+def chat_unsubscribe(request, chat_id: int):
+    chat = get_object_or_404(Chat, id=chat_id)
+    if request.user not in chat.participants.all() and not request.user.is_superuser:
+        return HttpResponseForbidden("У вас нет доступа к этому чату.")
+    chat.participants.remove(request.user)
+    return redirect('chat_list')
+
+
+
 @api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])
 def messages(request, chat_id):
@@ -73,6 +85,8 @@ def messages(request, chat_id):
             return Response({"error": "You do not have access to this chat room"}, status=status.HTTP_403_FORBIDDEN)
         messages = chat_room.messages.all()
         return Response(MessageSerializer(messages, many=True).data, status=status.HTTP_200_OK)
+
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
