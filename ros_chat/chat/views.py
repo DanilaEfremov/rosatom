@@ -19,7 +19,8 @@ from .serializers import MessageSerializer, ChatRoomSerializer
 def chat_list(request):
     """Возвращает список чатов пользователя."""
     chats = Chat.objects.all() if request.user.is_superuser else request.user.chats.all()
-    return render(request, 'chat/chat_list.html', {'chats': chats})
+    template = 'chat/part/chat_list_content.html' if request.htmx else 'chat/chat_list.html'
+    return render(request, template, {'chats': chats})
 
 @login_required
 def chat_detail(request, chat_id: int):
@@ -61,7 +62,16 @@ def chat_unsubscribe(request, chat_id: int):
     chat.participants.remove(request.user)
     return redirect('chat_list')
 
+@login_required
+@api_view(['DELETE'])
+def chat_unsubscribe_1(request, chat_id: int):
+    chat = get_object_or_404(Chat, id=chat_id)
+    if request.user not in chat.participants.all() and not request.user.is_superuser:
+        return HttpResponseForbidden("У вас нет доступа к этому чату.")
+    chat.participants.remove(request.user)
 
+    chats = Chat.objects.all() if request.user.is_superuser else request.user.chats.all()
+    return render(request, 'chat/part/chat_list.html', {'chats': chats})
 
 @api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])

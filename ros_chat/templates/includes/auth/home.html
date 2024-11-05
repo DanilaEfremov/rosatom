@@ -1,7 +1,7 @@
 <h2>Здравствуй, {{ user.username }}!</h2>
 
 <div class="flex flex-row justify-between pt-6">
-    <a class="button" href="{% url 'chat_list' %}">Просмотр моих чатов</a>
+    <a class="button" hx-get="{% url 'chat_list' %}" hx-target="#content" hx-swap="morth:innerHTML" hx-push-url="true">Просмотр моих чатов</a>
 
     <form method="post" action="{% url 'do_logout' %}">
         {% csrf_token %}

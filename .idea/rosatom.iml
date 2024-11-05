@@ -30,6 +30,7 @@
       <list>
         <option value="$MODULE_DIR$/ros_chat/templates" />
         <option value="$MODULE_DIR$/ros_chat/accounts/templates" />
+        <option value="$MODULE_DIR$/ros_chat/chat/templates" />
       </list>
     </option>
   </component>

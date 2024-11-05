@@ -1,4 +1,4 @@
-# Название проекта
+# Чат
 
 Этот проект представляет собой меесенджер чат. Он разработан на Django с поддержкой обработки запросов по API и включает поддержку веб-сокетов для работы в режиме реального времени.
 
@@ -17,6 +17,9 @@
 > В API используется встроенная аутентификация с помощью токенов для аутентификации и авторизации.
 
 API и web приложения могут работать одновременно.
+
+Так как чат является закрытым, то только администратор может подключать пользователей к конкретным чатам.
+Отписывание от чатов пользователя может производить сам пользователь.
 
 ### Используемые технологии
 1. Django
@@ -144,7 +147,7 @@ docker compose exec web python manage.py createsuperuser
                 "first_name": "",
                 "last_name": "",
                 "username": "dan",
-                "email": "mr.dan.efremov@yandex.ru"
+                "email": "something2@domain.ru"
             }
         ],
         "created_at": "2024-11-04T10:30:50+03:00"
@@ -153,7 +156,7 @@ docker compose exec web python manage.py createsuperuser
     ```
 
 ### 4. Сообщения из чата
-- **URL**: `/chat/{chat_id}/message`
+- **URL**: `/api/chat/{chat_id}/message`
 - **Метод**: `GET`
 - **Описание**: Получение сообщений из чата, доступных для текущего пользователя.
 - **Параметры**:
@@ -170,7 +173,7 @@ docker compose exec web python manage.py createsuperuser
                 "first_name": "",
                 "last_name": "",
                 "username": "dan",
-                "email": "mr.dan.efremov@yandex.ru"
+                "email": "something2@domain.ru"
             },
             "content": "8",
             "timestamp": "2024-11-04T10:31:23.116252+03:00"
@@ -183,7 +186,7 @@ docker compose exec web python manage.py createsuperuser
                 "first_name": "",
                 "last_name": "",
                 "username": "dan",
-                "email": "mr.dan.efremov@yandex.ru"
+                "email": "something2@domain.ru"
             },
             "content": "Привет!",
             "timestamp": "2024-11-04T11:23:52.903939+03:00"
@@ -228,8 +231,7 @@ docker compose exec web python manage.py createsuperuser
   - **Запрос**:
     ```json
     {
-     "message": "Hi Postman",
-     "user_id":1
+     "message": "Hi Postman"
     }
     ```
 - **Параметры**:
