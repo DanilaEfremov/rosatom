@@ -1,0 +1,7 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+     <h1>Чат номер {{ chat_id }} недоступен </h1>
+     <p> Вы не были добавленны в выбранный чат </p>
+     <a class="button" href="{% url 'chat_list' %}">Список доступных чатов</a>
+{% endblock content %}

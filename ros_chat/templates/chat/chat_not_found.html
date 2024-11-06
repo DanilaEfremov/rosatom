@@ -1,0 +1,7 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+     <h1>Чат номер {{ chat_id }} не найден</h1>
+     <p> Выбранный вами чат не существует </p>
+     <a class="button" href="{% url 'chat_list' %}">Список доступных чатов</a>
+{% endblock content %}
