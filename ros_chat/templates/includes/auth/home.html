@@ -3,7 +3,7 @@
 <div class="flex flex-row justify-between pt-6">
     <a class="button" hx-get="{% url 'chat_list' %}" hx-target="#content" hx-swap="morth:innerHTML" hx-push-url="true">Просмотр моих чатов</a>
 
-    <form method="post" action="{% url 'do_logout' %}">
+    <form method="post" hx-get="{% url 'do_logout' %}"  hx-target="#content" hx-swap="morth:innerHTML" hx-push-url="true">
         {% csrf_token %}
         <button class="button alert" type="submit">Выход</button>
     </form>

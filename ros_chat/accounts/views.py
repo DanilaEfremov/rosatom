@@ -1,3 +1,5 @@
+from tempfile import template
+
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -22,7 +24,8 @@ class SignUpView(generic.CreateView):
         return super().form_valid(form)
 
 def do_logout(request):
-    return render(request, 'logout.html')
+    template = 'logout.html' if not request.htmx else 'part/logout_content.html'
+    return render(request, template)
 
 
 

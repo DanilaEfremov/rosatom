@@ -1,0 +1,86 @@
+    <h1 class="big-header">{{ chat.name }}</h1>
+    
+    <div id="chat" class="flex flex-col mx-auto h-[calc(100vh-300px)]">
+    
+        <div id="chat-log" class="block mb-3 overflow-auto">
+            {% for message in messages %}
+                {% if message.user.id != request.user.id %} 
+                    <div class="chat chat-start">
+                        <div class="chat-header">
+                            @{{ message.user.username }}
+                            <time class="text-xs opacity-50">{{ message.timestamp }}</time>
+                        </div>
+                        <div class="chat-bubble chat-bubble-accent text-white font-bold">{{ message.content }}</div>
+                    </div>
+                {% else %}
+                    <div class="chat chat-end">
+                        <div class="chat-header">
+                            @{{ message.user.username }}
+                            <time class="text-xs opacity-50">{{ message.timestamp }}</time>
+                        </div>
+                        <div class="chat-bubble chat-bubble-info text-white font-bold">{{ message.content }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    
+        <div class="divider"></div>
+        
+        <form id="myForm" class="block w-full mx-auto">
+            <div id="chat-message-input-join" class="join">
+                <input id="chat-message-input" class="input input-bordered join-item dark:placeholder-gray-400"  placeholder="Введите сообщение..." />
+                <button id="chat-message-submit" type="button" class="btn join-item rounded-r-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 px-4"> 
+                    <svg class="w-7 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                    </svg>
+                </button>
+            </div>    
+        </form>
+    
+    </div>
+    
+    
+    <script>
+        const chatId = {{ chat.id }};
+        const userId = {{ request.user.id }};
+        const username = "{{ request.user.username }}";
+        const currentTime = new Date().toLocaleString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + chatId + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const msg_creator = data.username;
+        const first_name = data.first_name;
+        const last_name = data.last_name;
+        const message = data.message;
+        const timestamp = data.timestamp;
+        
+        const chatLog = document.getElementById('chat-log');
+        const msg_class = msg_creator === username ? 'chat-end' : 'chat-start';
+        const msg_color = msg_creator === username ? 'chat-bubble-info' : 'chat-bubble-accent';
+        chatLog.innerHTML += '<div class="chat ' + msg_class + '"> <div class="chat-header"> @' + msg_creator + ' <time class="text-xs opacity-50">' + currentTime + '</time></div><div class="chat-bubble ' + msg_color + ' text-white font-bold">' + message + '</div></div>';
+    };
+
+    document.getElementById('chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.getElementById('chat-message-input');
+        const message = messageInputDom.value;
+
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'user_id': userId
+        }));
+
+        messageInputDom.value = '';
+    };
+</script>
+

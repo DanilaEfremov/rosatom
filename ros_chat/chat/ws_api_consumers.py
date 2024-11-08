@@ -1,12 +1,12 @@
 # chat/consumers.py
 import json
-import logging
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from accounts.models import CustomUser
 from .models import Chat, Message
 from core.utils import convertDatetimeToString
+
 
 class ChatJsonConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):

@@ -15,8 +15,13 @@
  
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{% static 'core/js/htmx.min.js'%}" defer></script>
-    <script src="{% static 'core/js/idiomorph-ext.min.js'%}" defer></script>
+    <script src="{% static 'core/js/htmx.min.js'%}"></script>
+    <script src="{% static 'core/js/idiomorph-ext.min.js'%}"></script>
+    <script src="{% static 'core/js/ws.js'%}"></script>
+{#<script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>#}
+    <script src="https://unpkg.com/hyperscript.org@0.9.13"></script>
+    
+    {% block styles %}{% endblock styles %}
 
     {% block scripts %}{% endblock scripts %}
 {#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
@@ -93,13 +98,9 @@
         .alert-warning { @apply bg-orange-600 }
         .alert-danger { @apply bg-red-600 }
     </style>
-    
-    {% block styles %}{% endblock styles %}
-    
-    
 </head>
 
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' class="{% block class %}{% endblock %}" hx-ext="morph">
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' class="{% block class %}{% endblock %}" hx-ext="morph, ws">
 {#        {% include 'includes/messages.html' %}#}
     {% include 'includes/header.html' %}
     {% block layout %}{% endblock %}
