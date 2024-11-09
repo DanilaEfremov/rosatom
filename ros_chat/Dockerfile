@@ -14,6 +14,5 @@ COPY . /app
 RUN ./manage.py collectstatic --noinput
 
 RUN chmod -R 755 static
-RUN chmod -R 755 media
 
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "ros_chat.asgi:application"]

@@ -48,7 +48,7 @@ git clone https://github.com/danefremov/rosatom.git
 cd ./rosatom/ros_chat
 
 # Запустите Docker-композер из директории ros_chat
-docker-compose up --build
+docker compose up --build
 
 # Запустите миграции базы данных
 docker compose exec web python manage.py migrate
