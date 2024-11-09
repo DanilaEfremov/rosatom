@@ -1,7 +1,8 @@
 from django.urls import path
-from . import consumers, ws_api_consumers, ws_htmx_consumer
 from channels.auth import AuthMiddlewareStack
 from .middleware.drf import DRFAuthTokenMiddleware
+
+from . import ws_api_consumers, ws_htmx_consumer
 
 
 websocket_urlpatterns = [

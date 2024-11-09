@@ -11,12 +11,11 @@
     end
 </script>
 
-<h1 class="big-header">HTMX Чат: {{ chat.name }}</h1>
+<h1 class="big-header">Чат: {{ chat.name }}</h1>
     
 <div id="chat" class="flex flex-col mx-auto h-[calc(100vh-300px)]" ws-connect="/ws/htmx_chat/{{ chat.id }}/" _="on htmx:oobAfterSwap debounced at 100ms call scrollDown()">
     
     <div id="chat-log" class="block mb-3 overflow-auto" _="on load call scrollDown()">
-        
         {% for message in messages %}
             <div class="chat chat-{% if message.user.id != request.user.id %}start{% else %}end{% endif %}">
                 <div class="chat-header">
@@ -26,37 +25,19 @@
                 <div class="chat-bubble chat-bubble-{% if message.user.id != request.user.id %}accent{% else %}info{% endif %} text-white font-bold">{{ message.content }}</div>
             </div>
         {% endfor %}
-    
     </div>
     
     <div class="divider"></div>
 
-
-
-        
-{#    <form id="myForm" class="block w-full mx-auto" ws-send hx-swap-oob="true" hx-target="#myForm" hx-swap="morph:innerHTML">#}
-{#        <div id="chat-message-input-join" class="join">#}
-{#            <input id="chat-message-input" class="input input-bordered join-item dark:placeholder-gray-400"  placeholder="Введите сообщение..." name="chat_message"/>#}
-{#            <button id="chat-message-submit" type="submit" class="btn join-item rounded-r-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 px-4">#}
-{#                <svg class="w-7 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">#}
-{#                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>#}
-{#                </svg>#}
-{#            </button>#}
-{#        </div>#}
-{#    </form>#}
-
-
-    <form id="myForm" class="block w-full mx-auto" ws-send>
+    <form id="myForm" class="block w-full mx-auto" ws-send hx-target="#chat-message-input" hx-swap="morph:outerHTML">
         <div id="chat-message-input-join" class="join">
             <input id="chat-message-input" class="input input-bordered join-item dark:placeholder-gray-400"  placeholder="Введите сообщение..." name="chat_message"/>
-            <button id="chat-message-submit" type="submit" class="btn join-item rounded-r-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 px-4"> 
+            <button id="chat-message-submit" type="submit" class="btn join-item rounded-r-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 px-4">
                 <svg class="w-7 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                 </svg>
             </button>
-        </div>    
+        </div>
     </form>
 
-
-    
 </div>

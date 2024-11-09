@@ -5,8 +5,6 @@ import logging
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 
-from accounts.models import CustomUser
-from accounts.views import login
 from .models import Chat, Message
 from core.utils import convertDatetimeToString
 
@@ -54,6 +52,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'timestamp' : event['timestamp'],
             'is_my_msg' : event['username'] == self.scope['user'].username
         }
-        logging.info(context)
         # Отправка сообщения через WebSocket
         await self.send(text_data=render_to_string('chat/part/chat_message_htmx.html', context=context))

@@ -1,8 +1,12 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 
 
 class CustomUser(AbstractUser):
+    """На всякий случай делаем свой класс пользователя.
+    Он может пригодиться в дальнейшем.
+    Не забываем сообщить об этом системе,
+    добавив строчку AUTH_USER_MODEL = 'accounts.CustomUser' в файл настроек.
+    """
 
     @property
     def full_name(self) -> str:

@@ -1,7 +1,7 @@
 from django.db import models
-from accounts.models import CustomUser
 from django.utils import timezone
 
+from accounts.models import CustomUser
 
 class Chat(models.Model):
     name = models.CharField(max_length=255)
