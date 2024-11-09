@@ -20,22 +20,19 @@ def messages(request, chat_id):
             chat_id (int): ID чата
         Returns:
             Сообщение в формате JSON
-        """
+    """
 
     user = request.user
     chat_room = get_object_or_404(Chat, id=chat_id)
     if request.method == 'POST':
         content = request.data.get("content")
-
         if not content:
             return Response({"error": "Message cannot be empty"}, status=status.HTTP_400_BAD_REQUEST)
-
         if user not in chat_room.participants.all():
             return Response({"error": "You do not have access to this chat room"}, status=status.HTTP_403_FORBIDDEN)
-
         message = Message.objects.create(user=user, chat=chat_room, content=content)
-        return Response(MessageSerializer(message).data, status=status.HTTP_201_CREATED)
-
+        data = MessageSerializer(message).data
+        return Response(data, status=status.HTTP_201_CREATED)
     elif request.method == 'GET':
         if user not in chat_room.participants.all():
             return Response({"error": "You do not have access to this chat room"}, status=status.HTTP_403_FORBIDDEN)
@@ -55,12 +52,9 @@ def get_chats(request):
         """
 
     user = request.user
-
     chats = Chat.objects.filter(participants=user)
-
     if user.is_superuser:
         chats = Chat.objects.all()
-
     serialized_chats = ChatRoomSerializer(chats, many=True).data
     return Response(serialized_chats, status=status.HTTP_200_OK)
 
